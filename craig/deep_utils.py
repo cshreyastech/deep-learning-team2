@@ -71,7 +71,7 @@ def read_data(data_folderpath):
     to class names and each containing jpg files for class.'''
     X=[]
     y=[]
-    y_names=[]
+    y_names={}
     #Append folderpaths if needed
     if data_folderpath.endswith('\\')==False:
         data_folderpath=str(data_folderpath)+ '\\'
@@ -79,13 +79,13 @@ def read_data(data_folderpath):
     foldernames=glob(data_folderpath+'*/')
     #Define classes from foldernames
     for idx,foldername in enumerate(foldernames):
-        #Represent classes as integers
-        y.append(idx)
         #Append folder names to classes
-        y_names.append(foldername.split('\\')[-2])
+        y_names[idx]=(foldername.split('\\')[-2])
         #Build list of xml filenames    
         filelist=glob(foldername+'*')
         for file in filelist:
+            #Represent classes as integers
+            y.append(idx)
             #Load image
             image=Image.open(file)
             #store as np.array
