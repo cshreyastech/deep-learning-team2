@@ -8,6 +8,7 @@ from os.path import exists
 from glob import glob
 from PIL import Image
 import pickle
+import matplotlib.pyplot as plt
 
 def save_model(model,serialize_type,model_name='model'):
     '''Saves model and weights to file.'''
@@ -97,6 +98,26 @@ def read_data(data_folderpath):
     generate_pickle_files(X,y,y_names)
     return X, y, y_names
 
+def plot_accuracy(history):
+    '''Summarize history for accuracy'''
+    plt.plot(history.history['acc'])
+    plt.plot(history.history['val_acc'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.show()
+
+def plot_loss(history):
+    '''Summarize history for loss'''
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'test'], loc='upper left')
+    plt.show()
+    
 if __name__ == '__main__':    
     test=r"G:\Downloads\test"
     read_data(test)
