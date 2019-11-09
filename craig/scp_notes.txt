@@ -1,0 +1,19 @@
+#From local to cluster
+#scp localhost-path user@remote-host:/remotehost-path
+
+scp "C:\Users\Craig\Documents\GitHub\deep-learning-team2\craig\X.p" student043@ace.wpi.edu:~/deep-learning-team2/craig
+scp "C:\Users\Craig\Documents\GitHub\deep-learning-team2\craig\y.p" student043@ace.wpi.edu:~/deep-learning-team2/craig
+scp "C:\Users\Craig\Documents\GitHub\deep-learning-team2\craig\y_names.p" student043@ace.wpi.edu:~/deep-learning-team2/craig
+
+___
+
+#From cluster to local
+#scp user@remote-host:/remotehost-path localhost-path
+
+__
+
+#General procedure
+1. Upload mp4 videos and convert to jpg with utilities/mp4_to_jpg.py
+2. Resize all images using utilities/resize_images.py
+3. Read full dataset and save to pickle files using craig/deep_utils.py.
+4. Run python craig/cnn_large.py
