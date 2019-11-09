@@ -91,6 +91,7 @@ def read_data(data_folderpath):
             image=Image.open(file)
             #store as np.array
             X.append(np.array(image))
+            image.close()
 
     X=np.array(X)
     y=np.array(y)
@@ -118,6 +119,6 @@ def plot_loss(history):
     plt.legend(['train', 'test'], loc='upper left')
     plt.show()
     
-if __name__ == '__main__':    
-    test=r"G:\Downloads\test"
-    read_data(test)
+if __name__ == '__main__':   
+    dataset=r"G:\Documents\dl_full_dataset"
+    read_data(dataset)
