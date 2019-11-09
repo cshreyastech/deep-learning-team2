@@ -16,8 +16,10 @@ import deep_utils
 from sklearn.model_selection import train_test_split
 import pickle
 import tensorflow as tf
+import time
 #TODO: Why is y_names not printing right?
 
+start=time.time()
 #Initialize tensorflow GPU settings
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.5)
 config = tf.ConfigProto(gpu_options=gpu_options)
@@ -58,11 +60,11 @@ def larger_model():
 #	model.add(MaxPooling2D(pool_size=(2, 2)))
 	model.add(Dropout(0.2))
 	model.add(Flatten())
-#	model.add(Dense(256, activation='relu',init='he_normal'))
-#	model.add(Dropout(0.2))
-	model.add(Dense(100, activation='relu',init='he_normal'))
+	model.add(Dense(128, activation='relu',init='he_normal'))
 	model.add(Dropout(0.2))
-	model.add(Dense(50, activation='relu',init='he_normal'))
+	model.add(Dense(128, activation='relu',init='he_normal'))
+	model.add(Dropout(0.2))
+	model.add(Dense(64, activation='relu',init='he_normal'))
 	model.add(Dense(num_classes, activation='softmax'))
 	model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 	return model
@@ -73,6 +75,10 @@ model = larger_model()
 history=model.fit(X_train, y_train, validation_data=(X_test, y_test), nb_epoch=3, batch_size=64, verbose=2)
 # Final evaluation of the model
 scores = model.evaluate(X_test, y_test, verbose=0)
+
+finish=time.time()
+elapsed=finish-start
+print('Runtime :'+str(elapsed)+' seconds')
 
 deep_utils.plot_accuracy(history)
 deep_utils.plot_loss(history)
