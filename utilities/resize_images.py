@@ -28,7 +28,10 @@ def resize_images(input_image_folderpath,size=(224,224)):
 		out_filename=output_image_folderpath+basename(input_image).split('.')[0]+'.jpg'
 		print('Resizing '+ str(out_filename))
 		resize_image(input_image,out_filename,size=(size[0],size[1]))
-
+ 
 if __name__ == '__main__':
-	input_image_folderpath=r"G:\Downloads\MP4\cmiller"
+	input_image_folderpath=r"G:\Documents\dl_full_dataset\shreyas"
 	resize_images(input_image_folderpath,size=(224,224))
+    
+    #test=r"G:\Downloads\Capture.JPG"
+    #resize_image(test,r"C:\Users\Craig\Desktop\test3.jpg",size=(224,224))

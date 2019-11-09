@@ -21,7 +21,7 @@ import time
 
 start=time.time()
 #Initialize tensorflow GPU settings
-gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.5)
+gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.7)
 config = tf.ConfigProto(gpu_options=gpu_options)
 config.gpu_options.allow_growth = True
 session = tf.Session(config=config)
@@ -30,22 +30,30 @@ session = tf.Session(config=config)
 seed = 7
 np.random.seed(seed)
 
+print('Loading data')
 #Load data from pickle files
-X,y,y_names=deep_utils.load_pickle_files('X.p', 'y.p', 'y_names.p')
+X,y,y_names=deep_utils.load_pickle_files(r"G:/Documents/pickle/X.p", r"G:/Documents/pickle/y.p", r"G:/Documents/pickle/y_names.p")
 #print(np.shape(y))
-#print(y_names) 
 
-# Load and split data
+print('Splitting data')
+# Split data
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=seed)
+#Clear variables for memory
+X=None
+y=None
 
-print('Begin reshaping input data...')
+print('Reshaping data')
 # reshape to be [samples][pixels][width][height]
-X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], X_train.shape[2], X_train.shape[3]).astype(np.float16)
-X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], X_test.shape[2], X_test.shape[3]).astype(np.float16)
-print('Completed reshaping data.')
+X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], X_train.shape[2], X_train.shape[3]).astype(np.uint8)
+X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], X_test.shape[2], X_test.shape[3]).astype(np.uint8)
+
+print('Normalizing data')
 # normalize inputs from 0-255 to 0-1
-X_train = X_train / 255
-X_test = X_test / 255
+for idx, mat in enumerate(X_train):
+    X_train[idx]/=255
+for idx, mat in enumerate(X_test):
+    X_test[idx]/=255
+    
 # one hot encode outputs
 y_train = np_utils.to_categorical(y_train)
 y_test = np_utils.to_categorical(y_test)

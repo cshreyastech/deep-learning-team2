@@ -54,9 +54,9 @@ def get_layer_names(model):
 
 def generate_pickle_files(X,y,y_names):
     '''Generates pickle file to compress whole dataset.'''
-    pickle.dump(X, open("X.p", "wb"))
-    pickle.dump(y, open("y.p", "wb"))
-    pickle.dump(y, open("y_names.p", "wb"))
+    pickle.dump(X, open(r"G:/Documents/pickle/X.p", "wb"), protocol=4)
+    pickle.dump(y, open(r"G:/Documents/pickle/y.p", "wb"), protocol=4)
+    pickle.dump(y_names, open(r"G:/Documents/pickle/y_names.p", "wb"), protocol=4)
 
 def load_pickle_files(X_file, y_file, y_names_file):
     '''Reads data from pickle files'''
@@ -82,7 +82,8 @@ def read_data(data_folderpath):
     for idx,foldername in enumerate(foldernames):
         #Append folder names to classes
         y_names[idx]=(foldername.split('\\')[-2])
-        #Build list of xml filenames    
+        print(y_names[idx])
+        #Build list of filenames    
         filelist=glob(foldername+'*')
         for file in filelist:
             #Represent classes as integers
@@ -92,10 +93,10 @@ def read_data(data_folderpath):
             #store as np.array
             X.append(np.array(image))
             image.close()
-
+    print('Converting to np.array')
     X=np.array(X)
     y=np.array(y)
-
+    print('Pickling')
     generate_pickle_files(X,y,y_names)
     return X, y, y_names
 
