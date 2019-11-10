@@ -54,9 +54,9 @@ def get_layer_names(model):
 
 def generate_pickle_files(X,y,y_names):
     '''Generates pickle file to compress whole dataset.'''
-    pickle.dump(X, open(r"G:/Documents/pickle/X.p", "wb"), protocol=4)
-    pickle.dump(y, open(r"G:/Documents/pickle/y.p", "wb"), protocol=4)
-    pickle.dump(y_names, open(r"G:/Documents/pickle/y_names.p", "wb"), protocol=4)
+    pickle.dump(X, open(r"X.p", "wb"), protocol=4)
+    pickle.dump(y, open(r"y.p", "wb"), protocol=4)
+    pickle.dump(y_names, open(r"y_names.p", "wb"), protocol=4)
 
 def load_pickle_files(X_file, y_file, y_names_file):
     '''Reads data from pickle files'''
@@ -70,14 +70,15 @@ def read_data(data_folderpath):
     '''Reads full dataset.  Assumes data has been resized.
     Assumes "data_folderpath" contains subfolders corresponding
     to class names and each containing jpg files for class.'''
-    X=[]
-    y=[]
+    X=np.zeros((88251,32,32,3),dtype=np.uint8)
+    y=np.zeros((88251),dtype=np.uint8)
     y_names={}
     #Append folderpaths if needed
     if data_folderpath.endswith('\\')==False:
         data_folderpath=str(data_folderpath)+ '\\'
     #Collect all foldernames
     foldernames=glob(data_folderpath+'*/')
+    count=0
     #Define classes from foldernames
     for idx,foldername in enumerate(foldernames):
         #Append folder names to classes
@@ -87,15 +88,14 @@ def read_data(data_folderpath):
         filelist=glob(foldername+'*')
         for file in filelist:
             #Represent classes as integers
-            y.append(idx)
+            y[count]=idx
             #Load image
             image=Image.open(file)
             #store as np.array
-            X.append(np.array(image))
+            X[count]=np.array(image)
             image.close()
-    print('Converting to np.array')
-    X=np.array(X)
-    y=np.array(y)
+            count+=1
+
     print('Pickling')
     generate_pickle_files(X,y,y_names)
     return X, y, y_names
@@ -121,5 +121,5 @@ def plot_loss(history):
     plt.show()
     
 if __name__ == '__main__':   
-    dataset=r"G:\Documents\dl_full_dataset"
+    dataset=r"G:\Documents\dl_full_dataset_small"
     read_data(dataset)
