@@ -14,14 +14,13 @@ from keras.layers.convolutional import MaxPooling2D
 from keras.utils import np_utils
 import deep_utils
 from sklearn.model_selection import train_test_split
-import pickle
+#import pickle
 import tensorflow as tf
 import time
-#TODO: Why is y_names not printing right?
 
 start=time.time()
 #Initialize tensorflow GPU settings
-gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.7)
+gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.8)
 config = tf.ConfigProto(gpu_options=gpu_options)
 config.gpu_options.allow_growth = True
 session = tf.Session(config=config)
@@ -49,11 +48,13 @@ X_test = X_test.reshape(X_test.shape[0], X_test.shape[1], X_test.shape[2], X_tes
 
 print('Normalizing data')
 # normalize inputs from 0-255 to 0-1
-for idx, mat in enumerate(X_train):
-    X_train[idx]/=255
-for idx, mat in enumerate(X_test):
-    X_test[idx]/=255
-    
+for idx, _ in enumerate(X_train):
+    X_train[idx]=np.divide(X_train[idx],255)
+for idx, _ in enumerate(X_test):
+    X_test[idx]=np.divide(X_test[idx],255)
+#X_train=np.divide(X_train,255)
+#X_test=np.divide(X_test,255)
+
 # one hot encode outputs
 y_train = np_utils.to_categorical(y_train)
 y_test = np_utils.to_categorical(y_test)
@@ -64,10 +65,12 @@ def larger_model():
 	model = Sequential()
 	model.add(Convolution2D(30, 5, 5, border_mode='valid', input_shape=(X_train.shape[1], X_train.shape[2], X_train.shape[3]), activation='relu'))
 	model.add(MaxPooling2D(pool_size=(2, 2)))
-#	model.add(Convolution2D(15, 3, 3, activation='relu'))
-#	model.add(MaxPooling2D(pool_size=(2, 2)))
+	model.add(Convolution2D(15, 3, 3, activation='relu'))
+	model.add(MaxPooling2D(pool_size=(2, 2)))
 	model.add(Dropout(0.2))
 	model.add(Flatten())
+	model.add(Dense(128, activation='relu',init='he_normal'))
+	model.add(Dropout(0.2))
 	model.add(Dense(128, activation='relu',init='he_normal'))
 	model.add(Dropout(0.2))
 	model.add(Dense(128, activation='relu',init='he_normal'))
@@ -80,7 +83,7 @@ def larger_model():
 # build the model
 model = larger_model()
 # Fit the model
-history=model.fit(X_train, y_train, validation_data=(X_test, y_test), nb_epoch=3, batch_size=64, verbose=2)
+history=model.fit(X_train, y_train, validation_data=(X_test, y_test), nb_epoch=30, batch_size=128, verbose=2)
 # Final evaluation of the model
 scores = model.evaluate(X_test, y_test, verbose=0)
 
