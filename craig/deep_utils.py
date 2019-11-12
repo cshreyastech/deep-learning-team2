@@ -70,8 +70,8 @@ def read_data(data_folderpath):
     '''Reads full dataset.  Assumes data has been resized.
     Assumes "data_folderpath" contains subfolders corresponding
     to class names and each containing jpg files for class.'''
-    X=np.zeros((88251,32,32,3),dtype=np.uint8)
-    y=np.zeros((88251),dtype=np.uint8)
+    X=np.zeros((17738,32,32,3),dtype=np.uint8) #Full set: 88251, Train:70513, Test:17738,
+    y=np.zeros((17738),dtype=np.uint8)
     y_names={}
     #Append folderpaths if needed
     if data_folderpath.endswith('\\')==False:
@@ -121,5 +121,5 @@ def plot_loss(history):
     plt.show()
     
 if __name__ == '__main__':   
-    dataset=r"G:\Documents\dl_full_dataset_small"
+    dataset=r"G:\Documents\dl_full_dataset_small_split\test"
     read_data(dataset)
