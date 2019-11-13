@@ -36,9 +36,9 @@ def read_data(data_folderpath):
     Assumes "data_folderpath" contains 'train' and 'test' subfolders 
     which each have subsubfolders corresponding to class names and each 
     containing jpg files for class.'''
-    X_train=np.zeros((70513,32,32,3),dtype=np.uint8) #Full set: 88251, Train:70513, Test:17738
+    X_train=np.zeros((70513,224,224,3),dtype=np.uint8) #Full set: 88251, Train:70513, Test:17738
     y_train=np.zeros((70513),dtype=np.uint8)
-    X_test=np.zeros((17738,32,32,3),dtype=np.uint8)
+    X_test=np.zeros((17738,224,224,3),dtype=np.uint8)
     y_test=np.zeros((17738),dtype=np.uint8)
     y_names={}
     #Append folderpaths if needed
