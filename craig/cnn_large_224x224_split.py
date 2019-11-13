@@ -13,9 +13,13 @@ from keras.layers.convolutional import Convolution2D
 from keras.layers.convolutional import MaxPooling2D
 from keras.utils import np_utils
 import deep_utils
-#from sklearn.model_selection import train_test_split
 import tensorflow as tf
 import time
+from glob import glob
+from PIL import Image
+
+#Path for dataset
+dataset=r"dl_full_dataset_224x224_split"
 
 start=time.time()
 #Initialize tensorflow GPU settings
@@ -27,20 +31,63 @@ session = tf.Session(config=config)
 seed = 7
 np.random.seed(seed)
 
-print('Loading data')
-#Load data from pickle files
-#X,y,y_names=deep_utils.load_pickle_files(r"X.p", r"y.p", r"y_names.p")
-X_train,y_train,_=deep_utils.load_pickle_files(r"X_train.p", r"y_train.p", r"y_names.p")
-X_test,y_test,y_names=deep_utils.load_pickle_files(r"X_test.p", r"y_test.p", r"y_names.p")
+def read_data(data_folderpath):
+    '''Reads full dataset.  Assumes data has been resized.
+    Assumes "data_folderpath" contains 'train' and 'test' subfolders 
+    which each have subsubfolders corresponding to class names and each 
+    containing jpg files for class.'''
+    X_train=np.zeros((70513,32,32,3),dtype=np.uint8) #Full set: 88251, Train:70513, Test:17738
+    y_train=np.zeros((70513),dtype=np.uint8)
+    X_test=np.zeros((17738,32,32,3),dtype=np.uint8)
+    y_test=np.zeros((17738),dtype=np.uint8)
+    y_names={}
+    #Append folderpaths if needed
+    if data_folderpath.endswith('\\')==False:
+        data_folderpath=str(data_folderpath)+ '\\'
+    for dataset in ['train','test']:
+        #Collect all foldernames
+        foldernames=glob(data_folderpath+dataset+'\\'+'*/')
+        if dataset=='train':
+            count=0
+            #Define classes from foldernames
+            for idx,foldername in enumerate(foldernames):
+                #Append folder names to classes
+                y_names[idx]=(foldername.split('\\')[-2])
+                print('Loading training data: '+ y_names[idx])
+                #Build list of filenames    
+                filelist=glob(foldername+'*')
+                for file in filelist:
+                    #Represent classes as integers
+                    y_train[count]=idx
+                    #Load image
+                    image=Image.open(file)
+                    #store as np.array
+                    X_train[count]=np.array(image)
+                    image.close()
+                    count+=1
+        elif dataset=='test':
+            count=0
+            #Define classes from foldernames
+            for idx,foldername in enumerate(foldernames):
+                print('Loading testing data: '+ y_names[idx])
+                #Build list of filenames    
+                filelist=glob(foldername+'*')
+                for file in filelist:
+                    #Represent classes as integers
+                    y_test[count]=idx
+                    #Load image
+                    image=Image.open(file)
+                    #store as np.array
+                    X_test[count]=np.array(image)
+                    image.close()
+                    count+=1
+        else:
+            print('Undefined dataset type')
 
-#print('Splitting data')
-## Split data
+    return X_train, y_train, X_test, y_test, y_names
 
-#X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=seed,shuffle=True)
-
-#Clear variables for memory
-#X=None
-#y=None
+#Load data
+X_train, y_train, X_test, y_test, y_names=read_data(dataset)
 
 print('Reshaping data')
 ## reshape to be [samples][width][height][pixels]
@@ -66,8 +113,8 @@ def larger_model():
 	model.add(MaxPooling2D(pool_size=(2, 2)))
 	model.add(Dropout(0.5))
 	model.add(Flatten())
-#	model.add(Dense(128, activation='relu',init='he_normal'))
-#	model.add(Dropout(0.5))
+	model.add(Dense(128, activation='relu',init='he_normal'))
+	model.add(Dropout(0.5))
 	model.add(Dense(128, activation='relu',init='he_normal'))
 	model.add(Dropout(0.5))
 	model.add(Dense(128, activation='relu',init='he_normal'))

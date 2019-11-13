@@ -70,7 +70,7 @@ def read_data(data_folderpath):
     '''Reads full dataset.  Assumes data has been resized.
     Assumes "data_folderpath" contains subfolders corresponding
     to class names and each containing jpg files for class.'''
-    X=np.zeros((17738,32,32,3),dtype=np.uint8) #Full set: 88251, Train:70513, Test:17738,
+    X=np.zeros((17738,32,32,3),dtype=np.uint8) #Full set: 88251, Train:70513, Test:17738
     y=np.zeros((17738),dtype=np.uint8)
     y_names={}
     #Append folderpaths if needed
