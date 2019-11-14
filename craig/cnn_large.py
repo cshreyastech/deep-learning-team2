@@ -16,6 +16,7 @@ import deep_utils
 #from sklearn.model_selection import train_test_split
 import tensorflow as tf
 import time
+import random
 
 start=time.time()
 #Initialize tensorflow GPU settings
@@ -32,6 +33,16 @@ print('Loading data')
 #X,y,y_names=deep_utils.load_pickle_files(r"X.p", r"y.p", r"y_names.p")
 X_train,y_train,_=deep_utils.load_pickle_files(r"X_train.p", r"y_train.p", r"y_names.p")
 X_test,y_test,y_names=deep_utils.load_pickle_files(r"X_test.p", r"y_test.p", r"y_names.p")
+
+def simul_shuffle(mat1, mat2):
+    idx=np.arange(0,mat1.shape[0])
+    random.shuffle(idx)
+    mat1=mat1[idx]
+    mat2=mat2[idx]
+    return mat1, mat2
+
+X_train,y_train=simul_shuffle(X_train,y_train)
+X_test,y_test=simul_shuffle(X_test,y_test)
 
 #print('Splitting data')
 ## Split data

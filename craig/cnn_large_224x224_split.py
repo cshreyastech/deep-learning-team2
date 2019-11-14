@@ -17,6 +17,7 @@ import tensorflow as tf
 import time
 from glob import glob
 from PIL import Image
+import random
 
 #Path for dataset
 dataset=r"dl_full_dataset_224x224_split"
@@ -86,8 +87,19 @@ def read_data(data_folderpath):
 
     return X_train, y_train, X_test, y_test, y_names
 
+def simul_shuffle(mat1, mat2):
+    idx=np.arange(0,mat1.shape[0])
+    random.shuffle(idx)
+    mat1=mat1[idx]
+    mat2=mat2[idx]
+    return mat1, mat2
+
 #Load data
 X_train, y_train, X_test, y_test, y_names=read_data(dataset)
+
+#Shuffle data
+X_train,y_train=simul_shuffle(X_train,y_train)
+X_test,y_test=simul_shuffle(X_test,y_test)
 
 print('Reshaping data')
 ## reshape to be [samples][width][height][pixels]
