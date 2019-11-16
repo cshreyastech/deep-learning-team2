@@ -6,7 +6,7 @@ Deep Learning for Advanced Robot Perception (HW7-8,Team #2)
 - [Model #2](https://github.com/mech0ctopus/deep-learning-team2/blob/master/craig/cnn_large.py)
 - [Model #3](https://github.com/mech0ctopus/deep-learning-team2/blob/master/brian/cnn_large.py)
 
-### utilities
+### Utilities
 - mp4_to_jpg.py
 - resize_images.py
 - resize_images_crop.py
