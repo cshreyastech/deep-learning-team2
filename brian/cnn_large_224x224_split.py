@@ -1,5 +1,5 @@
-# Craig Miller
-# cmiller@wpi.edu
+# Brian wElls
+# Updated model derived from original by cmiller
 # Deep Learning for Advanced Robot Perception
 #
 # Larger CNN for the HW7-8, Team #2 Facial Recognition Dataset
